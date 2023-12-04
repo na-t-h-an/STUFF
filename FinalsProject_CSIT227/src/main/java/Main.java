@@ -1,0 +1,109 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author Nathan
+ */
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Create player characters
+        Paladin paladin = new Paladin();
+        Archer archer = new Archer();
+        Mage mage = new Mage();
+
+        // Create enemy characters using their respective classes
+        Enemy skeleton = new Skeleton();
+        Enemy dragon = new Dragon();
+        Enemy demonLord = new DemonLord();
+
+        // Array of enemies
+        Enemy[] enemies = {skeleton, dragon, demonLord};
+
+        // Choose the player character
+        System.out.println("Choose your character: ");
+        System.out.println("1. Paladin");
+        System.out.println("2. Archer");
+        System.out.println("3. Mage");
+        System.out.print("Character: ");
+        int playerChoice = scanner.nextInt();
+
+        Character playerCharacter;
+
+        switch (playerChoice) {
+            case 1:
+                playerCharacter = paladin;
+                break;
+            case 2:
+                playerCharacter = archer;
+                break;
+            case 3:
+                playerCharacter = mage;
+                break;
+            default:
+                System.out.println("Invalid choice. Defaulting to Paladin.");
+                playerCharacter = paladin;
+        }
+
+        // Iterate through each enemy
+        for (Enemy currentEnemy : enemies) {
+            System.out.println("Battle with " + currentEnemy.name + " begins!");
+
+            // Continue the battle until the enemy is defeated
+            while (currentEnemy.health > 0) {
+                // Choose the attack type
+                System.out.println();
+                System.out.println("Choose your attack type: ");
+                System.out.println("1. Normal");
+                System.out.println("2. Skill");
+                System.out.println("3. Special");
+                System.out.print("Attacking: ");
+                int attackChoice = scanner.nextInt();
+
+                String selectedAttackType;
+
+                switch (attackChoice) {
+                    case 1:
+                        selectedAttackType = "normal";
+                        break;
+                    case 2:
+                        selectedAttackType = "skill";
+                        break;
+                    case 3:
+                        selectedAttackType = "special";
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Defaulting to normal attack.");
+                        selectedAttackType = "normal";
+                }
+
+                // Simulate a battle between the chosen character and the current enemy with the selected attack type
+                playerCharacter.attack(currentEnemy, selectedAttackType);
+
+                // If the enemy is still not defeated, let the enemy attack
+                if (currentEnemy.health > 0) {
+                    currentEnemy.attack(playerCharacter);
+                }
+            }
+
+            System.out.println(currentEnemy.name + " has been defeated!\n");
+
+            // Ask if the player wants to choose a new enemy
+            System.out.println("Do you want to attack another enemy? (1. Yes, 2. No)");
+            int continueChoice = scanner.nextInt();
+
+            if (continueChoice != 1) {
+                // Exit the loop if the player doesn't want to continue attacking
+                break;
+            }
+        }
+
+        // Close the scanner to avoid resource leaks
+        scanner.close();
+    }
+}
